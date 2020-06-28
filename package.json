@@ -5,6 +5,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "phaser": "^3.23.0",
     "svelte": "^3.21.0"
   },
   "devDependencies": {
