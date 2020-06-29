@@ -11,7 +11,7 @@ export default class DriveScene extends Phaser.Scene {
         this.load.image('car', 'car.png')
     }
 
-    create() {
+    create(data) {
         this.map = this.add.tilemap('map')
         const tileset = this.map.addTilesetImage('tiles', 'tiles')
         this.layer = this.map.createDynamicLayer('Tile Layer 1', tileset)
@@ -41,46 +41,29 @@ export default class DriveScene extends Phaser.Scene {
 
         this.cars = []
 
-        const pads = this.input.gamepad.gamepads
-
-        this.input.gamepad.once('connected', (p) => {
-            for (const pad of pads) {
-                if (!pad) {
-                    continue
+        for (let p of data.players) {
+            let controls
+            if (p.keyboard) {
+                const keys = this.input.keyboard.addKeys({
+                    up: Phaser.Input.Keyboard.KeyCodes.UP,
+                    down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+                    left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+                    right: Phaser.Input.Keyboard.KeyCodes.RIGHT
+                })
+                controls = {
+                    up() { return keys.up.isDown },
+                    down() { return keys.down.isDown },
+                    left() { return keys.left.isDown },
+                    right() { return keys.right.isDown },
                 }
-                if (cur >= startingPositions.length) {
-                    return
+            } else {
+                console.log(this.input.gamepad.gamepads)
+                controls = {
+                    up() { return p.pad.up },
+                    down() { return p.pad.down },
+                    left() { return p.pad.left },
+                    right() { return p.pad.right },
                 }
-                const controls = {
-                    up() { return pad.up },
-                    down() { return pad.down },
-                    left() { return pad.left },
-                    right() { return pad.right },
-                }
-                const starting = startingPositions[cur]
-                cur++
-                const car = new Car(this, controls, starting.position[0], starting.position[1])
-                car.angle = starting.angle
-                car.move(starting.move)
-                this.cars.push(car)
-            }
-        });
-
-        this.input.keyboard.on('keydown-SPACE', () => {
-            if (cur >= startingPositions.length) {
-                return
-            }
-            const keys = this.input.keyboard.addKeys({
-                up: Phaser.Input.Keyboard.KeyCodes.UP,
-                down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-                left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-                right: Phaser.Input.Keyboard.KeyCodes.RIGHT
-            })
-            const controls = {
-                up() { return keys.up.isDown },
-                down() { return keys.down.isDown },
-                left() { return keys.left.isDown },
-                right() { return keys.right.isDown },
             }
             const starting = startingPositions[cur]
             cur++
@@ -88,7 +71,7 @@ export default class DriveScene extends Phaser.Scene {
             car.angle = starting.angle
             car.move(starting.move)
             this.cars.push(car)
-        })
+        }
 
         this.safetile = 1 // index of the tile that you can drive on
         this.gridsize = 32

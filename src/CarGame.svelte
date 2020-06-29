@@ -1,6 +1,7 @@
 <script>
   import Phaser from 'phaser'
   import DriveScene from './DriveScene'
+  import MenuScene from './MenuScene'
 
   const config = {
     type: Phaser.AUTO,
@@ -19,7 +20,7 @@
       // mode: Phaser.Scale.FIT,
       // autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [DriveScene]
+    scene: [MenuScene, DriveScene]
   }
 
   const game = new Phaser.Game(config)
