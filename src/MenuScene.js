@@ -44,7 +44,8 @@ export default class MenuScene extends Phaser.Scene {
             })
         })
 
-        let allReady
+        let allReady = false
+        let playing = false
 
         this.input.gamepad.on('connected', pad => {
             this.middleText.setText('')
@@ -52,6 +53,9 @@ export default class MenuScene extends Phaser.Scene {
             const player = this.players[pad.index]
             player.pad = pad
             player.pad.on('down', (index, value, button) => {
+                if (playing) {
+                    return
+                }
                 // index 0 is A index 1 is B
                 if (index === 1) {
                     if (player.ready) {
@@ -74,6 +78,7 @@ export default class MenuScene extends Phaser.Scene {
                             players: this.players.filter(p => p.joined),
                             input: this.input
                         })
+                        playing = true
                     }
                     if (!player.joined) {
                         player.joined = true
