@@ -57,12 +57,35 @@ export default class DriveScene extends Phaser.Scene {
                     right() { return keys.right.isDown },
                 }
             } else {
-                console.log(this.input.gamepad.gamepads)
                 controls = {
-                    up() { return p.pad.up },
-                    down() { return p.pad.down },
-                    left() { return p.pad.left },
-                    right() { return p.pad.right },
+                    up() {
+                        const yAxis = p.pad.getAxisValue(1)
+                        if (yAxis < -.5) {
+                            return true
+                        }
+                        return p.pad.up
+                    },
+                    down() {
+                        const yAxis = p.pad.getAxisValue(1)
+                        if (yAxis > .5) {
+                            return true
+                        }
+                        return p.pad.down
+                    },
+                    left() {
+                        const xAxis = p.pad.getAxisValue(0)
+                        if (xAxis < -.5) {
+                            return true
+                        }
+                        return p.pad.left
+                    },
+                    right() {
+                        const xAxis = p.pad.getAxisValue(0)
+                        if (xAxis > .5) {
+                            return true
+                        }
+                        return p.pad.right
+                    },
                 }
             }
             const starting = startingPositions[cur]
