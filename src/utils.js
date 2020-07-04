@@ -13,3 +13,11 @@ export function opposites(turnTo) {
     throw `Unknown ${turnTo}`
   }
 }
+
+export const tints = [
+  0xFFFFFF,
+  0x00FF00,
+  0xaaaaFF,
+  0xccFF00,
+  0x00ccAA,
+]

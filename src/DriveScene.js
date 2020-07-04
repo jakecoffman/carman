@@ -1,4 +1,5 @@
 import Car from "./Car";
+import {tints} from "./utils";
 
 export default class DriveScene extends Phaser.Scene {
     constructor() {
@@ -91,6 +92,7 @@ export default class DriveScene extends Phaser.Scene {
             const starting = startingPositions[cur]
             cur++
             const car = new Car(this, controls, starting.position[0], starting.position[1])
+            car.tint = tints[p.color]
             car.angle = starting.angle
             car.move(starting.move)
             this.cars.push(car)

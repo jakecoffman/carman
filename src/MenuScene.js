@@ -1,3 +1,5 @@
+import {tints} from "./utils";
+
 export default class MenuScene extends Phaser.Scene {
     constructor() {
         super({key: 'menu'})
@@ -14,24 +16,18 @@ export default class MenuScene extends Phaser.Scene {
             this.add.text(100, 500, ''),
             this.add.text(500, 500, '')
         ]
-        this.players = [
-            {
-                id: 1,
-                car: this.add.sprite(132, 132, 'car')
-            },
-            {
-                id: 2,
-                car: this.add.sprite(532, 132, 'car')
-            },
-            {
-                id: 3,
-                car: this.add.sprite(132, 532, 'car')
-            },
-            {
-                id: 4,
-                car: this.add.sprite(532, 532, 'car')
+        this.players = []
+        const startingPositions = [[132, 132], [532, 132], [132, 532], [532, 542]]
+        for (let i=0; i < startingPositions.length; i++ ) {
+            const pos = startingPositions[i]
+            const player = {
+                id: i,
+                car: this.add.sprite(pos[0], pos[1], 'car'),
+                color: i
             }
-        ]
+            player.car.tine = tints[i]
+            this.players.push(player)
+        }
         this.players.forEach(player => {
             player.car.setVisible(false)
         })
@@ -85,8 +81,20 @@ export default class MenuScene extends Phaser.Scene {
             if (this.playing) {
                 return
             }
-            // index 0 is A index 1 is B
-            if (index === 1) {
+            console.log('player', pad.index, 'pressed', index)
+            if (index === 14 && !player.ready) {
+                player.color--
+                if (player.color < 0) {
+                    player.color = tints.length-1
+                }
+                player.car.tint = tints[player.color]
+            } else if (index === 15 && !player.ready) {
+                player.color++
+                if (player.color >= tints.length) {
+                    player.color = 0
+                }
+                player.car.tint = tints[player.color]
+            } else if (index === 1) { // index 0 is A index 1 is B
                 if (player.ready) {
                     player.ready = false
                     this.allReady = false
@@ -126,7 +134,6 @@ export default class MenuScene extends Phaser.Scene {
                     this.playing = true
                 }
             }
-            console.log(index)
         })
     }
 }
