@@ -102,14 +102,6 @@ export default class MenuScene extends Phaser.Scene {
                 }
             }
             if (index === 0) {
-                if (this.allReady) {
-                    this.scene.launch('drive', {
-                        players: this.players.filter(p => p.joined),
-                        input: this.input
-                    })
-                    clearInterval(this.controllerPoller)
-                    this.playing = true
-                }
                 if (!player.joined) {
                     player.joined = true
                     this.playerText[pad.index].setText('select car')
@@ -124,6 +116,14 @@ export default class MenuScene extends Phaser.Scene {
                         this.middleText.setText('press A to play')
                     }
                     return
+                }
+                if (this.allReady) {
+                    this.scene.launch('drive', {
+                        players: this.players.filter(p => p.joined),
+                        input: this.input
+                    })
+                    clearInterval(this.controllerPoller)
+                    this.playing = true
                 }
             }
             console.log(index)
