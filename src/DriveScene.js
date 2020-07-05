@@ -1,5 +1,5 @@
 import Car from "./Car";
-import {tints} from "./utils";
+import {randomSafeTile, tints} from "./utils";
 import Phaser from "phaser";
 import Pellet from "./Pellet";
 
@@ -12,7 +12,7 @@ export default class DriveScene extends Phaser.Scene {
         this.load.tilemapTiledJSON('map', 'maze.json')
         this.load.image('tiles', 'tiles.png')
         this.load.image('car', 'car.png')
-        this.load.image('dot', 'dot.png')
+        this.load.image('heart', 'heart.png')
     }
 
     create(data) {
@@ -101,10 +101,7 @@ export default class DriveScene extends Phaser.Scene {
             this.cars.push(car)
         }
 
-        this.safetile = 1 // index of the tile that you can drive on
-        this.gridsize = 32
-
-        this.pellet = new Pellet(this, 5, 5)
+        this.pellet = new Pellet(this)
 
         // this.cameras.main.startFollow(this.car, true)
         this.cameras.main.setBounds(0, 0, this.layer.width, this.layer.height)
@@ -128,8 +125,9 @@ export default class DriveScene extends Phaser.Scene {
                 })
             }
             this.physics.world.collide(this.pellet, car1, () => {}, () => {
-                this.pellet.destroy()
-                this.pellet = new Pellet(this, 11, 7)
+                const tile = randomSafeTile(this.map)
+                this.pellet.x = tile.pixelX+16
+                this.pellet.y = tile.pixelY+16
                 return false
             })
         }

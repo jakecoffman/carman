@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import {opposites} from "./utils";
+import {gridsize, opposites, safetile} from "./utils";
 
 export default class Car extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, controls, x, y) {
@@ -45,8 +45,7 @@ export default class Car extends Phaser.Physics.Arcade.Sprite {
       return
     }
 
-    this.scene.map.worldToTileXY(this.x, this.y, true, this.marker)
-    // this.marker.y = this.scene.map.worldToTileY(this.y, true)
+    this.marker = this.scene.map.worldToTileXY(this.x, this.y, true)
 
     this.directions[Phaser.LEFT] = this.scene.map.getTileAt(this.marker.x - 1, this.marker.y)
     this.directions[Phaser.RIGHT] = this.scene.map.getTileAt(this.marker.x + 1, this.marker.y)
@@ -77,7 +76,7 @@ export default class Car extends Phaser.Physics.Arcade.Sprite {
   }
 
   checkDirection(turnTo) {
-    if (this.directions[turnTo].index !== this.scene.safetile) {
+    if (this.directions[turnTo].index !== safetile) {
       //  Invalid direction if they're already set to turn that way
       //  Or there is no tile there, or the tile isn't index a floor tile
       return
@@ -89,8 +88,8 @@ export default class Car extends Phaser.Physics.Arcade.Sprite {
     } else {
       this.turning = turnTo
 
-      this.turnPoint.x = (this.marker.x * this.scene.gridsize) + (this.scene.gridsize / 2)
-      this.turnPoint.y = (this.marker.y * this.scene.gridsize) + (this.scene.gridsize / 2)
+      this.turnPoint.x = (this.marker.x * gridsize) + (gridsize / 2)
+      this.turnPoint.y = (this.marker.y * gridsize) + (gridsize / 2)
     }
   }
 
@@ -143,29 +142,18 @@ export default class Car extends Phaser.Physics.Arcade.Sprite {
   }
 
   getAngle(to) {
-    // if (to === Phaser.UP) {
-    //   return 0
-    // }
-    // if (to === Phaser.DOWN) {
-    //   return 180
-    // }
-    // if (to === Phaser.LEFT) {
-    //   return -90
-    // }
-    // if (to === Phaser.RIGHT) {
-    //   return 90
-    // }
-    //
-    //  About-face?
+    //  About-face
     if (this.current === opposites(to)) {
       return this.angle - 180
     }
+    // counter-clockwise
     if ((this.current === Phaser.UP && to === Phaser.LEFT) ||
-        (this.current === Phaser.DOWN && to === Phaser.RIGHT) ||
         (this.current === Phaser.LEFT && to === Phaser.DOWN) ||
+        (this.current === Phaser.DOWN && to === Phaser.RIGHT) ||
         (this.current === Phaser.RIGHT && to === Phaser.UP)) {
       return this.angle - 90
     }
+    // clockwise
     return this.angle + 90
   }
 }

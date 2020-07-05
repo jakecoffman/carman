@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 export function opposites(turnTo) {
   if (turnTo === Phaser.NONE) {
     return Phaser.NONE
@@ -21,3 +23,18 @@ export const tints = [
   0xccFF00,
   0x00ccAA,
 ]
+
+// index of the tile that you can drive on
+export const safetile = 1
+export const gridsize = 32
+
+export function randomSafeTile(map) {
+  let x, y, tile
+  do {
+    x = Phaser.Math.RND.between(0, map.width-1)
+    y = Phaser.Math.RND.between(0, map.height-1)
+    tile = map.getTileAt(x, y)
+  } while (tile.index !== safetile)
+
+  return tile
+}
