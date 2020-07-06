@@ -10,6 +10,8 @@ export default class Pellet extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this)
         scene.physics.add.existing(this)
+
+        this.moving = false
     }
 
     update(args) {

@@ -131,9 +131,25 @@ export default class DriveScene extends Phaser.Scene {
                 })
             }
             this.physics.world.collide(this.pellet, car1, () => {}, () => {
+                if (this.pellet.moving) {
+                    return false
+                }
                 const tile = randomSafeTile(this.map)
-                this.pellet.x = tile.pixelX+16
-                this.pellet.y = tile.pixelY+16
+                const newX = tile.pixelX+16
+                const newY = tile.pixelY+16
+
+                this.pellet.moving = true
+                this.tweens.add({
+                    targets: this.pellet,
+                    x: newX,
+                    y: newY,
+                    duration: 1000,
+                    ease: 'Power2',
+                    onComplete: () => this.pellet.moving = false
+                })
+                //
+                // this.pellet.x = tile.pixelX+16
+                // this.pellet.y = tile.pixelY+16
                 return false
             })
         }
