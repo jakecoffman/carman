@@ -2,9 +2,9 @@ import Phaser from 'phaser'
 import {gridsize, opposites, safetile} from "./utils";
 
 export default class Car extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, controls, x, y) {
+  constructor(scene, controls, x, y, color) {
     const tile = scene.map.getTileAt(x, y)
-    super(scene, tile.pixelX+16, tile.pixelY+16, "car")
+    super(scene, tile.pixelX+16, tile.pixelY+16, "cars", color)
 
     this.scene = scene
     this.controls = controls

@@ -1,4 +1,6 @@
-import {tints} from "./utils";
+import Phaser from "phaser";
+
+const carColors = 4
 
 export default class MenuScene extends Phaser.Scene {
     constructor() {
@@ -6,7 +8,7 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('car', 'car.png')
+        this.load.spritesheet('cars', 'cars.png', { frameWidth: 32, frameHeight: 32 })
     }
 
     create() {
@@ -22,10 +24,9 @@ export default class MenuScene extends Phaser.Scene {
             const pos = startingPositions[i]
             const player = {
                 id: i,
-                car: this.add.sprite(pos[0], pos[1], 'car'),
+                car: this.add.sprite(pos[0], pos[1], 'cars', i),
                 color: i
             }
-            player.car.tine = tints[i]
             this.players.push(player)
         }
         this.players.forEach(player => {
@@ -50,7 +51,8 @@ export default class MenuScene extends Phaser.Scene {
         this.input.keyboard.once('keyup_SPACE', () => {
             this.scene.start('drive', {
                 players: [{
-                    keyboard: true
+                    keyboard: true,
+                    color: Phaser.Math.RND.between(0, 3)
                 }]
             })
         })
@@ -85,15 +87,15 @@ export default class MenuScene extends Phaser.Scene {
             if (index === 14 && !player.ready) {
                 player.color--
                 if (player.color < 0) {
-                    player.color = tints.length-1
+                    player.color = carColors-1
                 }
-                player.car.tint = tints[player.color]
+                player.car.frame = player.color
             } else if (index === 15 && !player.ready) {
                 player.color++
-                if (player.color >= tints.length) {
+                if (player.color >= carColors) {
                     player.color = 0
                 }
-                player.car.tint = tints[player.color]
+                player.car.frame = player.color
             } else if (index === 1) { // index 0 is A index 1 is B
                 if (player.ready) {
                     player.ready = false

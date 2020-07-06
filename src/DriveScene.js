@@ -1,5 +1,5 @@
 import Car from "./Car";
-import {randomSafeTile, tints} from "./utils";
+import {randomSafeTile} from "./utils";
 import Phaser from "phaser";
 import Pellet from "./Pellet";
 
@@ -11,7 +11,8 @@ export default class DriveScene extends Phaser.Scene {
     preload() {
         this.load.tilemapTiledJSON('map', 'maze.json')
         this.load.image('tiles', 'tiles.png')
-        this.load.image('car', 'car.png')
+        // this.load.image('car', 'car.png')
+        this.load.spritesheet('cars', 'cars.png', { frameWidth: 32, frameHeight: 32 })
         this.load.atlas('heart', 'heart-sheet.png', 'heart-sheet.json')
     }
 
@@ -100,8 +101,7 @@ export default class DriveScene extends Phaser.Scene {
             }
             const starting = startingPositions[cur]
             cur++
-            const car = new Car(this, controls, starting.position[0], starting.position[1])
-            car.tint = tints[p.color]
+            const car = new Car(this, controls, starting.position[0], starting.position[1], p.color)
             car.angle = starting.angle
             car.move(starting.move)
             this.cars.push(car)

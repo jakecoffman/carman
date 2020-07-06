@@ -16,14 +16,6 @@ export function opposites(turnTo) {
   }
 }
 
-export const tints = [
-  0xFFFFFF,
-  0x00FF00,
-  0xaaaaFF,
-  0xccFF00,
-  0x00ccAA,
-]
-
 // index of the tile that you can drive on
 export const safetile = 1
 export const gridsize = 32
