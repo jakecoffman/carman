@@ -12,10 +12,16 @@ export default class DriveScene extends Phaser.Scene {
         this.load.tilemapTiledJSON('map', 'maze.json')
         this.load.image('tiles', 'tiles.png')
         this.load.image('car', 'car.png')
-        this.load.image('heart', 'heart.png')
+        this.load.atlas('heart', 'heart-sheet.png', 'heart-sheet.json')
     }
 
     create(data) {
+        this.anims.create({
+            key: 'spin',
+            frames: this.anims.generateFrameNames('heart'),
+            frameRate: 10,
+            repeat: -1
+        });
         this.map = this.add.tilemap('map')
         const tileset = this.map.addTilesetImage('tiles', 'tiles')
         this.layer = this.map.createDynamicLayer('Tile Layer 1', tileset)
