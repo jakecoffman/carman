@@ -1,3 +1,4 @@
+<script>
 import Phaser from "phaser";
 
 const carColors = 4
@@ -145,3 +146,4 @@ export default class MenuScene extends Phaser.Scene {
         })
     }
 }
+</script>
