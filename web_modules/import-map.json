@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "phaser": "./phaser.js",
+    "svelte/internal": "./svelte/internal.js"
+  }
+}
