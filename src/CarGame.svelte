@@ -1,7 +1,6 @@
 <script>
   import Phaser from 'phaser'
-  import DriveScene from './DriveScene'
-  import MenuScene from './MenuScene'
+  import Menu from "./Menu.svelte";
 
   const config = {
     type: Phaser.AUTO,
@@ -17,11 +16,14 @@
       }
     },
     scale: {
-      // mode: Phaser.Scale.FIT,
-      // autoCenter: Phaser.Scale.CENTER_BOTH
-    },
-    scene: [MenuScene, DriveScene]
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH
+    }
   }
 
   const game = new Phaser.Game(config)
 </script>
+
+{#if game}
+<Menu {game}/>
+{/if}

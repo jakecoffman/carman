@@ -1,9 +1,13 @@
+<script>
 import Car from "./Car";
 import {randomSafeTile} from "./utils";
 import Phaser from "phaser";
 import Pellet from "./Pellet";
 
-export default class DriveScene extends Phaser.Scene {
+export let game
+export let players
+
+class DriveScene extends Phaser.Scene {
     constructor() {
         super({key: 'drive'})
     }
@@ -11,7 +15,6 @@ export default class DriveScene extends Phaser.Scene {
     preload() {
         this.load.tilemapTiledJSON('map', 'maze.json')
         this.load.image('tiles', 'tiles.png')
-        // this.load.image('car', 'car.png')
         this.load.spritesheet('cars', 'cars.png', { frameWidth: 32, frameHeight: 32 })
         this.load.atlas('heart', 'heart-sheet.png', 'heart-sheet.json')
     }
@@ -103,6 +106,7 @@ export default class DriveScene extends Phaser.Scene {
             cur++
             const car = new Car(this, controls, starting.position[0], starting.position[1], p.color)
             car.angle = starting.angle
+            car.player = p
             car.move(starting.move)
             this.cars.push(car)
         }
@@ -134,33 +138,35 @@ export default class DriveScene extends Phaser.Scene {
                 if (this.pellet.moving) {
                     return false
                 }
+                players[car1.player.id].score += 1
                 const tile = randomSafeTile(this.map)
                 const newX = tile.pixelX+16
                 const newY = tile.pixelY+16
+                const pelletTile = this.map.getTileAtWorldXY(this.pellet.x, this.pellet.y)
 
                 this.pellet.moving = true
                 this.tweens.add({
                     targets: this.pellet,
                     x: newX,
                     y: newY,
-                    duration: 1000,
+                    duration: Phaser.Math.Distance.Snake(tile.x, tile.y, pelletTile.x, pelletTile.y) * 100,
                     ease: 'Power2',
                     onComplete: () => this.pellet.moving = false
                 })
-                //
-                // this.pellet.x = tile.pixelX+16
-                // this.pellet.y = tile.pixelY+16
                 return false
             })
         }
 
-        const mouseX = this.input.mousePointer.worldX
-        const mouseY = this.input.mousePointer.worldY
-        const tile = this.map.getTileAtWorldXY(mouseX, mouseY)
-        if (tile) {
-            this.hoverText.x = mouseX + 5
-            this.hoverText.y = mouseY + 10
-            this.hoverText.setText(`${tile.x}, ${tile.y}`)
-        }
+        // const mouseX = this.input.mousePointer.worldX
+        // const mouseY = this.input.mousePointer.worldY
+        // const tile = this.map.getTileAtWorldXY(mouseX, mouseY)
+        // if (tile) {
+        //     this.hoverText.x = mouseX + 5
+        //     this.hoverText.y = mouseY + 10
+        //     this.hoverText.setText(`${tile.x}, ${tile.y}`)
+        // }
     }
 }
+
+game.scene.add('drive', DriveScene, false)
+</script>
