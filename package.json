@@ -12,7 +12,7 @@
     "@snowpack/app-scripts-svelte": "^1.2.0",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/svelte": "^3.0.0",
-    "jest": "^25.4.0",
+    "jest": "^29.6.4",
     "snowpack": "^2.5.0"
   }
 }
